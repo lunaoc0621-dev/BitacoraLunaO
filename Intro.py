@@ -3,11 +3,11 @@ import streamlit as st
 st.set_page_config(page_title="Bitácora de Luna", page_icon="💖", layout="wide")
 
 # ---------------------------------------------------------------
-# Estilo Y2K / cyber pastel
+# Estilo Y2K sticker: letras gordas con contorno, halftone, destellos
 # ---------------------------------------------------------------
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=VT323&family=Quicksand:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Racing+Sans+One&family=Chakra+Petch:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
     --rosa: #FF8FC7;
@@ -15,8 +15,9 @@ CSS = """
     --rosa-hot: #FF4FA8;
     --lila: #D9C2FF;
     --cian: #B8F2FF;
-    --plata: #F4F0FA;
-    --texto: #6B2C57;
+    --azul: #5B7BE0;
+    --tinta: #26286E;
+    --texto: #2E2468;
 }
 
 .stApp {
@@ -28,99 +29,134 @@ CSS = """
         radial-gradient(circle at 25% 92%, #ffffffaa 0 2px, transparent 3px),
         linear-gradient(135deg, #FFD9EE 0%, #FFC2E2 28%, #E3CCFF 62%, #C9F3FF 100%);
     background-size: 220px 220px, 260px 260px, 180px 180px, 300px 300px, 240px 240px, 100% 100%;
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 500;
     color: var(--texto);
 }
 
 [data-testid="stHeader"] { background: transparent; }
 .block-container { padding-top: 2rem; max-width: 1200px; }
 
-/* estrellitas y corazones flotando */
+/* destellos flotando */
 .deco { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-.deco span { position: absolute; animation: titilar 3s ease-in-out infinite; color: #fff; text-shadow: 0 0 8px #FF8FC7, 0 0 14px #fff; }
-@keyframes titilar { 0%,100% { opacity: .25; transform: scale(.8) rotate(0deg);} 50% { opacity: 1; transform: scale(1.2) rotate(15deg);} }
+.deco span { position: absolute; animation: titilar 3s ease-in-out infinite; color: #fff; -webkit-text-stroke: 1.5px var(--tinta); }
+@keyframes titilar { 0%,100% { opacity: .4; transform: scale(.8) rotate(0deg);} 50% { opacity: 1; transform: scale(1.25) rotate(20deg);} }
 
-/* cinta tipo marquee */
+/* cinta */
 .cinta {
-    background: linear-gradient(90deg, #FF8FC7, #D9C2FF, #B8F2FF, #FF8FC7);
-    border: 2px solid #fff; border-radius: 999px;
-    box-shadow: 0 0 14px #FF8FC7aa, inset 0 2px 4px #ffffffcc;
-    overflow: hidden; white-space: nowrap; padding: .25rem 0; margin-bottom: 1rem;
+    background: var(--tinta); border: 3px solid #fff; border-radius: 999px;
+    box-shadow: 0 0 0 3px var(--tinta), 6px 7px 0 3px var(--rosa-hot);
+    overflow: hidden; white-space: nowrap; padding: .3rem 0; margin: 0 .4rem 1.6rem .4rem;
+    transform: rotate(-1deg); position: relative; z-index: 1;
 }
-.cinta div { display: inline-block; padding-left: 100%; animation: correr 22s linear infinite;
-    font-family: 'VT323', monospace; font-size: 1.4rem; color: #fff; text-shadow: 0 0 6px #FF4FA8; }
+.cinta div { display: inline-block; padding-left: 100%; animation: correr 24s linear infinite;
+    font-family: 'Space Mono', monospace; font-weight: 700; font-size: .95rem; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--cian); }
 @keyframes correr { to { transform: translateX(-100%); } }
 
-/* titulo cromado */
+/* logo estilo sticker */
+.logo { text-align: center; margin: .2rem 0 .6rem 0; position: relative; z-index: 1; }
+.logo .tag {
+    display: inline-block; background: var(--tinta); color: #fff; font-family: 'Space Mono', monospace; font-weight: 700;
+    font-size: .75rem; letter-spacing: 3px; padding: .25rem 1rem; border-radius: 999px; text-transform: uppercase;
+    transform: rotate(-3deg); box-shadow: 3px 3px 0 var(--rosa-hot); margin-bottom: .8rem;
+}
 .titulo {
-    font-family: 'Orbitron', sans-serif; font-weight: 900; text-align: center;
-    font-size: clamp(2rem, 6vw, 4rem); letter-spacing: 3px; margin: .3rem 0 0 0;
-    background: linear-gradient(180deg, #ffffff 0%, #FFB3DD 40%, #FF4FA8 55%, #FFD1EA 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    -webkit-text-stroke: 1.5px #fff;
-    filter: drop-shadow(0 0 10px #FF8FC7) drop-shadow(3px 3px 0 #D9C2FF);
+    font-family: 'Bagel Fat One', 'Racing Sans One', sans-serif; font-weight: 400; margin: 0; line-height: .95;
+    font-size: clamp(2.6rem, 9vw, 5.6rem); letter-spacing: 2px; color: var(--rosa);
+    -webkit-text-stroke: 10px var(--tinta); paint-order: stroke fill;
+    filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(6px 8px 0 var(--tinta));
+    transform: skew(-8deg) rotate(-2deg); animation: flota 3.5s ease-in-out infinite;
 }
-.subtitulo { text-align: center; font-family: 'VT323', monospace; font-size: 1.5rem; color: #B03C86; letter-spacing: 2px; }
-.separador { text-align: center; font-size: 1.4rem; letter-spacing: 8px; color: #fff; text-shadow: 0 0 8px #FF4FA8; margin: .6rem 0 1rem 0; }
+.titulo .l2 { display: block; font-size: .62em; color: var(--cian); margin-top: .12em; }
+@keyframes flota {
+    0%,100% { transform: skew(-8deg) rotate(-2deg) translateY(0); }
+    50% { transform: skew(-8deg) rotate(-2deg) translateY(-7px); }
+}
+.kanji {
+    font-family: 'Racing Sans One', sans-serif; font-size: 1.5rem; letter-spacing: 8px; margin-top: 1rem; color: #fff;
+    -webkit-text-stroke: 6px var(--tinta); paint-order: stroke fill; filter: drop-shadow(3px 3px 0 var(--rosa-hot));
+}
+.separador { text-align: center; font-size: 1.3rem; letter-spacing: 10px; color: #fff; -webkit-text-stroke: 1.5px var(--tinta); margin: .8rem 0 1.2rem 0; position: relative; z-index: 1; }
 
-/* ventanas estilo Y2K */
+/* intro tipo sticker */
+.intro {
+    background: #fff; border: 4px solid var(--tinta); border-radius: 30px 10px 30px 10px; padding: 1.3rem 1.7rem; margin: 1rem 0 2rem 0;
+    box-shadow: 0 0 0 4px var(--cian), 8px 9px 0 4px var(--tinta); line-height: 1.7; position: relative; z-index: 1;
+}
+.intro b { color: var(--rosa-hot); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+
+/* tarjetas sticker */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 2rem 1.8rem; position: relative; z-index: 1; padding: .4rem; }
 .ventana {
-    background: #ffffffd9; border: 2px solid #fff; border-radius: 18px; overflow: hidden;
-    box-shadow: 0 0 0 2px #FF8FC7, 0 10px 24px #FF4FA855, 0 0 22px #D9C2FF;
-    margin-bottom: .4rem; position: relative; z-index: 1;
-    transition: transform .2s ease, box-shadow .2s ease;
+    --fondo: #FFE0F0; --punto: var(--rosa-hot); --boton: var(--rosa-hot);
+    position: relative; overflow: hidden; background: var(--fondo);
+    border: 4px solid var(--tinta); border-radius: 30px 10px 30px 10px;
+    box-shadow: 0 0 0 4px #fff, 8px 9px 0 4px var(--tinta);
+    transform: rotate(-1deg); transition: transform .18s ease, box-shadow .18s ease;
 }
-.ventana:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 0 0 2px #FF4FA8, 0 14px 30px #FF4FA888, 0 0 30px #B8F2FF; }
-.barra {
-    display: flex; align-items: center; justify-content: space-between; padding: .35rem .7rem;
-    background: linear-gradient(90deg, #FF8FC7 0%, #D9C2FF 60%, #B8F2FF 100%);
-    border-bottom: 2px solid #fff; font-family: 'Orbitron', sans-serif; font-size: .72rem; color: #fff;
-    text-shadow: 0 0 5px #FF4FA8; letter-spacing: 1px;
+.ventana:nth-child(even) { transform: rotate(1deg); border-radius: 10px 30px 10px 30px; }
+.ventana:nth-child(3n+2) { --fondo: #EADCFF; --punto: var(--azul); --boton: var(--azul); }
+.ventana:nth-child(3n+3) { --fondo: #D6F7FF; --punto: #35B8D8; --boton: #35B8D8; }
+.ventana:hover { transform: rotate(0deg) translateY(-6px); box-shadow: 0 0 0 4px #fff, 12px 14px 0 4px var(--tinta); }
+/* trama halftone */
+.ventana::before {
+    content: ""; position: absolute; top: 0; right: 0; width: 70%; height: 65%; pointer-events: none;
+    background-image: radial-gradient(var(--punto) 26%, transparent 28%); background-size: 9px 9px; opacity: .5;
+    -webkit-mask-image: radial-gradient(circle at 100% 0%, #000 0%, transparent 72%);
+    mask-image: radial-gradient(circle at 100% 0%, #000 0%, transparent 72%);
 }
-.barra .puntos span { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 4px;
-    background: radial-gradient(circle at 30% 30%, #fff, #FF8FC7); border: 1px solid #fff; }
-.cuerpo { padding: 1rem 1.1rem 1.2rem 1.1rem; }
-.icono { font-size: 2.6rem; text-align: center; filter: drop-shadow(0 0 8px #FF8FC7); }
-.cuerpo h3 { font-family: 'Orbitron', sans-serif; font-size: 1.02rem; margin: .2rem 0 .5rem 0; color: var(--texto); text-align: center; }
-.cuerpo p { font-size: .95rem; line-height: 1.55; margin-bottom: .9rem; text-align: center; }
+/* destello */
+.ventana::after {
+    content: "✦"; position: absolute; bottom: 6px; right: 14px; font-size: 2.2rem; color: #fff; pointer-events: none;
+    -webkit-text-stroke: 1.5px var(--tinta);
+}
+.cuerpo { position: relative; z-index: 1; padding: 1rem 1.2rem 1.4rem 1.2rem; }
+.cabecera { display: flex; align-items: center; justify-content: space-between; margin-bottom: .3rem; }
+.pill { background: var(--tinta); color: #fff; font-family: 'Space Mono', monospace; font-weight: 700; font-size: .7rem;
+    letter-spacing: 2px; padding: .2rem .75rem; border-radius: 999px; text-transform: uppercase; }
+.mini { color: var(--tinta); letter-spacing: 4px; font-size: .9rem; }
+.icono { font-size: 2.7rem; text-align: center; margin: .2rem 0 .1rem 0;
+    filter: drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(3px 4px 0 var(--tinta)); }
+.cuerpo h3 {
+    font-family: 'Racing Sans One', 'Chakra Petch', sans-serif; font-weight: 400; font-size: 1.45rem; letter-spacing: 1px;
+    text-transform: uppercase; text-align: center; margin: .3rem 0 .7rem 0; color: #fff;
+    -webkit-text-stroke: 7px var(--tinta); paint-order: stroke fill; transform: skew(-8deg);
+    filter: drop-shadow(3px 3px 0 var(--rosa-hot));
+}
+.cuerpo p { font-size: .95rem; line-height: 1.55; margin-bottom: 1.1rem; text-align: center; font-weight: 600; }
 
 .btn-wrap { text-align: center; }
 .btn {
-    display: inline-block; text-decoration: none !important; color: #fff !important; font-family: 'Orbitron', sans-serif;
-    font-weight: 700; font-size: .8rem; letter-spacing: 1px; padding: .5rem 1.3rem; border-radius: 999px;
-    background: linear-gradient(180deg, #FFC2E6 0%, #FF4FA8 50%, #FF8FC7 51%, #FFB3DD 100%);
-    border: 2px solid #fff; box-shadow: 0 0 12px #FF4FA8aa, inset 0 2px 3px #ffffffcc;
-    text-shadow: 0 1px 2px #B03C86;
+    display: inline-block; text-decoration: none !important; color: #fff !important; font-family: 'Racing Sans One', sans-serif;
+    font-size: 1.05rem; letter-spacing: 2px; text-transform: uppercase; padding: .5rem 1.6rem; background: var(--boton);
+    border: 3px solid var(--tinta); border-radius: 999px; box-shadow: 0 0 0 3px #fff, 5px 6px 0 3px var(--tinta);
+    text-shadow: 2px 2px 0 var(--tinta); transform: skew(-6deg); transition: transform .1s ease, box-shadow .1s ease;
 }
-.btn:hover { filter: brightness(1.1); box-shadow: 0 0 18px #FF4FA8, inset 0 2px 3px #fff; }
+.btn:hover { transform: skew(-6deg) translate(2px, 3px); box-shadow: 0 0 0 3px #fff, 2px 3px 0 3px var(--tinta); }
 
 .destacada { grid-column: 1 / -1; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.2rem; position: relative; z-index: 1; }
 
-.intro {
-    background: #ffffffcc; border: 2px solid #fff; border-radius: 22px; padding: 1.2rem 1.6rem; margin: 1rem 0 1.4rem 0;
-    box-shadow: 0 0 0 2px #D9C2FF, 0 0 24px #FF8FC799; line-height: 1.7; position: relative; z-index: 1;
-}
-.intro b { color: #FF4FA8; }
-
-[data-testid="stSidebar"] { background: linear-gradient(180deg, #FFC2E2 0%, #E3CCFF 60%, #C9F3FF 100%); border-right: 2px solid #fff; }
-[data-testid="stSidebar"] * { color: var(--texto) !important; }
-.side-deco { text-align: center; font-size: 2rem; letter-spacing: 6px; text-shadow: 0 0 8px #fff; }
-.pie { text-align: center; font-family: 'VT323', monospace; font-size: 1.5rem; color: #B03C86; margin: 1.5rem 0 .5rem 0; position: relative; z-index: 1; }
+[data-testid="stSidebar"] { background: linear-gradient(180deg, #FFC2E2 0%, #E3CCFF 60%, #C9F3FF 100%); border-right: 4px solid var(--tinta); }
+[data-testid="stSidebar"] * { color: var(--texto) !important; font-family: 'Chakra Petch', sans-serif; font-weight: 600; }
+[data-testid="stSidebar"] h3 { font-family: 'Racing Sans One', sans-serif !important; font-weight: 400 !important; font-size: 1.4rem !important; text-transform: uppercase; }
+.side-deco { text-align: center; font-size: 2rem; letter-spacing: 6px; color: #fff !important; -webkit-text-stroke: 1.5px var(--tinta); }
+.pie { text-align: center; font-family: 'Racing Sans One', sans-serif; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--tinta); margin: 1.5rem 0 .5rem 0; position: relative; z-index: 1; }
 </style>
 """
 
 DECO = (
     '<div class="deco">'
-    '<span style="top:6%;left:5%;font-size:1.8rem;animation-delay:0s">★</span>'
-    '<span style="top:14%;left:92%;font-size:1.4rem;animation-delay:.6s">♥</span>'
-    '<span style="top:30%;left:3%;font-size:1.2rem;animation-delay:1.2s">✦</span>'
-    '<span style="top:46%;left:95%;font-size:2rem;animation-delay:.3s">★</span>'
-    '<span style="top:62%;left:6%;font-size:1.5rem;animation-delay:1.8s">♥</span>'
-    '<span style="top:78%;left:90%;font-size:1.3rem;animation-delay:.9s">✧</span>'
-    '<span style="top:90%;left:12%;font-size:1.9rem;animation-delay:1.5s">★</span>'
-    '<span style="top:8%;left:48%;font-size:1.1rem;animation-delay:2.1s">✦</span>'
-    '<span style="top:88%;left:70%;font-size:1.6rem;animation-delay:.4s">♥</span>'
+    '<span style="top:6%;left:5%;font-size:2rem;animation-delay:0s">✦</span>'
+    '<span style="top:14%;left:92%;font-size:1.6rem;animation-delay:.6s">♥</span>'
+    '<span style="top:30%;left:3%;font-size:1.4rem;animation-delay:1.2s">★</span>'
+    '<span style="top:46%;left:95%;font-size:2.2rem;animation-delay:.3s">✦</span>'
+    '<span style="top:62%;left:6%;font-size:1.7rem;animation-delay:1.8s">♥</span>'
+    '<span style="top:78%;left:90%;font-size:1.5rem;animation-delay:.9s">★</span>'
+    '<span style="top:90%;left:12%;font-size:2.1rem;animation-delay:1.5s">✦</span>'
+    '<span style="top:8%;left:48%;font-size:1.2rem;animation-delay:2.1s">♥</span>'
+    '<span style="top:88%;left:70%;font-size:1.8rem;animation-delay:.4s">✦</span>'
     '</div>'
 )
 
@@ -130,31 +166,34 @@ st.markdown(CSS + DECO, unsafe_allow_html=True)
 # Barra lateral
 # ---------------------------------------------------------------
 with st.sidebar:
-    st.markdown("<div class='side-deco'>♥ ★ ♥</div>", unsafe_allow_html=True)
+    st.markdown("<div class='side-deco'>♥ ✦ ♥</div>", unsafe_allow_html=True)
     st.subheader("Aplicaciones con Inteligencia Artificial")
     st.write(
         "La inteligencia artificial permite mejorar la toma de decisiones con el uso de "
         "datos, automatizar tareas rutinarias y proporcionar análisis avanzados en tiempo "
         "real, lo que resulta en una mayor eficiencia y precisión en diversos campos."
     )
-    st.markdown("<div class='side-deco'>✦ ♡ ✧</div>", unsafe_allow_html=True)
-    st.caption("sistema luna.exe cargado con éxito ♥")
+    st.markdown("<div class='side-deco'>✦ ★ ✦</div>", unsafe_allow_html=True)
+    st.caption("luna 2000 · cargado con éxito ♥")
 
 # ---------------------------------------------------------------
 # Encabezado (sin sangría para que Markdown no lo trate como código)
 # ---------------------------------------------------------------
 ENCABEZADO = (
-    '<div class="cinta"><div>★ BIENVENIDA A LA BITÁCORA DE LUNA ★ ♥ SISTEMA ONLINE ♥ '
-    '✦ 10 PORTALES DISPONIBLES ✦ ★ NAVEGA CON CUIDADO, HAY MUCHO BRILLO ★ ♥</div></div>'
-    '<h1 class="titulo">BITÁCORA DE LUNA</h1>'
-    '<div class="subtitulo">&gt;&gt; diario cyber de una exploradora de IA &lt;&lt;</div>'
-    '<div class="separador">♥ ★ ♥ ★ ♥ ★ ♥</div>'
+    '<div class="cinta"><div>★ Radio Luna 94.9 FM ★ ♥ Bitácora online ♥ ✦ 10 portales ✦ '
+    '月 ★ Y2K forever ★ ♥ Navega con cuidado, hay mucho brillo ✦</div></div>'
+    '<div class="logo">'
+    '<span class="tag">★ Radio Luna 94.9 FM ★</span>'
+    '<h1 class="titulo">BITÁCORA<span class="l2">de Luna ★</span></h1>'
+    '<div class="kanji">月 ルナ ♥ 2000 ✦</div>'
+    '</div>'
+    '<div class="separador">♥ ✦ ♥ ✦ ♥ ✦ ♥</div>'
     '<div class="intro">♥ <b>Registro 000, transmisión desde la Luna:</b> mientras el mundo '
     'duerme, enciendo mi computadora rosada y entro a una red secreta donde las máquinas '
     'leen imágenes, escuchan audios, descubren emociones en los textos y dibujan nubes con '
     'las palabras más repetidas. En esta bitácora guardé los portales que más me gustaron. '
-    'Cada ventana brillante es un acceso directo a un experimento distinto. Haz clic, '
-    'explora y, si encuentras algo increíble, anótalo en tu propio diario ★</div>'
+    'Cada sticker brillante es un acceso directo a un experimento distinto. Haz clic, '
+    'explora y, si encuentras algo increíble, anótalo en tu propio diario ✦</div>'
 )
 st.markdown(ENCABEZADO, unsafe_allow_html=True)
 
@@ -166,104 +205,93 @@ APPS = [
         "destacada": True,
         "icono": "💖",
         "titulo": "Intro",
-        "archivo": "intro.exe",
         "intro": "La puerta de entrada a la bitácora. Aquí empieza todo: una primera mirada "
                  "al mundo de las aplicaciones de inteligencia artificial que Luna fue "
                  "coleccionando. Si es tu primera visita, comienza por este portal.",
         "url": "https://xhavuua73kp7cddvz9vn4i.streamlit.app",
-        "boton": "ENTRAR",
+        "boton": "Entrar",
     },
     {
         "icono": "🔊",
         "titulo": "Text to Speech",
-        "archivo": "text_to_speech.exe",
         "intro": "Escribo una frase y una voz digital la pronuncia con estilo. "
                  "Mis mensajes secretos ahora se pueden escuchar.",
         "url": "https://nyxocljendujfzyqz7krmt.streamlit.app",
-        "boton": "ESCUCHAR",
+        "boton": "Escuchar",
     },
     {
         "icono": "🎀",
         "titulo": "Texto a voz",
-        "archivo": "texto_a_voz.exe",
         "intro": "La versión en español de mi estudio de grabación. "
                  "Escribe en tu idioma y deja que la IA te lea en voz alta.",
         "url": "https://nyxocljendujfzyqz7krmt.streamlit.app",
-        "boton": "HABLAR",
+        "boton": "Hablar",
     },
     {
         "icono": "🔍",
         "titulo": "OCR 1",
-        "archivo": "ocr_1.exe",
         "intro": "Mi escáner mágico: le muestro una imagen con letras y la IA las "
                  "reconoce y las convierte en texto que puedo copiar.",
         "url": "https://pw8rf7frlc7ghrfhcckq4b.streamlit.app",
-        "boton": "ESCANEAR",
+        "boton": "Escanear",
     },
     {
         "icono": "🎧",
         "titulo": "OCR Audio",
-        "archivo": "ocr_audio.exe",
         "intro": "Combina lectura y sonido: extrae el texto de una imagen y luego "
                  "lo transforma en audio. Es como una lectora de bolsillo.",
         "url": "https://ocr-audio-mqs4vjg3fsycboxxf7yz4g.streamlit.app",
-        "boton": "LEER Y ESCUCHAR",
+        "boton": "Leer y escuchar",
     },
     {
         "icono": "☁️",
         "titulo": "WordCloud",
-        "archivo": "wordcloud.exe",
         "intro": "Un texto se convierte en una nube de palabras. Las más repetidas "
                  "brillan más grandes, como estrellas en el cielo.",
         "url": "https://wordcloud-gxbqwhi2czajvvcap3eieg.streamlit.app",
-        "boton": "CREAR NUBE",
+        "boton": "Crear nube",
     },
     {
         "icono": "💗",
         "titulo": "Análisis de sentimiento",
-        "archivo": "sentimiento.exe",
         "intro": "Un detector de emociones para textos. Le paso una frase y me dice "
                  "si suena feliz, triste o neutral. Un termómetro del corazón.",
         "url": "https://sentimenta-6c2tf2myjwrxelx9jia4qv.streamlit.app",
-        "boton": "SENTIR",
+        "boton": "Sentir",
     },
     {
         "icono": "📈",
         "titulo": "TF-IDF",
-        "archivo": "tfidf.exe",
         "intro": "Mide qué palabras son realmente importantes en un documento, "
                  "no solo las más repetidas. Matemática con glitter.",
         "url": "https://tdfesp-ogty4wdviudez6v86227fy.streamlit.app",
-        "boton": "ANALIZAR",
+        "boton": "Analizar",
     },
     {
         "icono": "👁️",
         "titulo": "YOLO",
-        "archivo": "yolo.exe",
         "intro": "Visión por computadora en tiempo récord: detecta y señala los "
                  "objetos que aparecen en una imagen, cada uno con su cajita rosa.",
         "url": "https://yolov5-b4hucs4d7ifakwqzncnswo.streamlit.app",
-        "boton": "DETECTAR",
+        "boton": "Detectar",
     },
     {
         "icono": "🧠",
         "titulo": "Teachable Machine",
-        "archivo": "tm.exe",
         "intro": "Aquí uso mi propio modelo entrenado: lo apunto a la cámara y "
                  "reconoce lo que le enseñé. Una IA hecha a mi medida.",
         "url": "https://eyujbc4vujdsq8nu5uewvy.streamlit.app",
-        "boton": "PROBAR MODELO",
+        "boton": "Probar modelo",
     },
 ]
 
 
-def tarjeta(app):
+def tarjeta(num, app):
     clase = "ventana destacada" if app.get("destacada") else "ventana"
     return (
-        f'<div class="{clase}">'
-        f'<div class="barra"><span>♥ {app["archivo"]}</span>'
-        f'<span class="puntos"><span></span><span></span><span></span></span></div>'
-        f'<div class="cuerpo">'
+        f'<div class="{clase}"><div class="cuerpo">'
+        f'<div class="cabecera"><span class="pill">Portal {num:02d}</span>'
+        f'<span class="mini">♥ ★</span></div>'
         f'<div class="icono">{app["icono"]}</div>'
         f'<h3>{app["titulo"]}</h3>'
         f'<p>{app["intro"]}</p>'
@@ -274,12 +302,12 @@ def tarjeta(app):
 
 
 st.markdown(
-    '<div class="grid">' + "".join(tarjeta(a) for a in APPS) + "</div>",
+    '<div class="grid">' + "".join(tarjeta(i, a) for i, a in enumerate(APPS, start=1)) + "</div>",
     unsafe_allow_html=True,
 )
 
 st.markdown(
-    "<div class='separador'>♥ ★ ♥ ★ ♥ ★ ♥</div>"
-    "<div class='pie'>fin de la transmisión ✦ nos vemos en el próximo registro ✦ luna.exe ♥</div>",
+    "<div class='separador'>♥ ✦ ♥ ✦ ♥ ✦ ♥</div>"
+    "<div class='pie'>fin de la transmisión ✦ 月 ✦ luna 2000 ♥</div>",
     unsafe_allow_html=True,
 )
