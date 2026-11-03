@@ -137,6 +137,18 @@ CSS = """
 
 .destacada { grid-column: 1 / -1; }
 
+/* encabezado de entrega */
+.seccion { text-align: center; margin: 2.4rem 0 1.6rem 0; position: relative; z-index: 1; }
+.seccion span {
+    display: inline-block; font-family: 'Bagel Fat One', 'Racing Sans One', sans-serif; font-size: clamp(1.9rem, 5.5vw, 3.2rem);
+    letter-spacing: 2px; text-transform: uppercase; color: var(--cian);
+    -webkit-text-stroke: 9px var(--tinta); paint-order: stroke fill;
+    filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(5px 7px 0 var(--rosa-hot));
+    transform: skew(-8deg) rotate(-1.5deg);
+}
+.seccion small { display: block; margin-top: 1rem; font-family: 'Space Mono', monospace; font-weight: 700; font-size: .8rem;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--tinta); }
+
 [data-testid="stSidebar"] { background: linear-gradient(180deg, #FFC2E2 0%, #E3CCFF 60%, #C9F3FF 100%); border-right: 4px solid var(--tinta); }
 [data-testid="stSidebar"] * { color: var(--texto) !important; font-family: 'Chakra Petch', sans-serif; font-weight: 600; }
 [data-testid="stSidebar"] h3 { font-family: 'Racing Sans One', sans-serif !important; font-weight: 400 !important; font-size: 1.4rem !important; text-transform: uppercase; }
@@ -180,7 +192,7 @@ with st.sidebar:
 # Encabezado (sin sangría para que Markdown no lo trate como código)
 # ---------------------------------------------------------------
 ENCABEZADO = (
-    '<div class="cinta"><div>★ Radio Luna 94.9 FM ★ ♥ Bitácora online ♥ ✦ 10 portales ✦ '
+    '<div class="cinta"><div>★ Radio Luna 94.9 FM ★ ♥ Bitácora online ♥ ✦ 18 portales ✦ '
     '月 ★ Y2K forever ★ ♥ Navega con cuidado, hay mucho brillo ✦</div></div>'
     '<div class="logo">'
     '<span class="tag">★ Radio Luna 94.9 FM ★</span>'
@@ -301,10 +313,92 @@ def tarjeta(num, app):
     )
 
 
-st.markdown(
-    '<div class="grid">' + "".join(tarjeta(i, a) for i, a in enumerate(APPS, start=1)) + "</div>",
-    unsafe_allow_html=True,
-)
+def seccion(titulo, subtitulo):
+    return (
+        f'<div class="seccion"><span>{titulo}</span>'
+        f'<small>{subtitulo}</small></div>'
+    )
+
+
+def grid(apps):
+    return '<div class="grid">' + "".join(tarjeta(i, a) for i, a in enumerate(apps, start=1)) + "</div>"
+
+
+# ---------------------------------------------------------------
+# Entrega dos
+# ---------------------------------------------------------------
+APPS_2 = [
+    {
+        "icono": "✏️",
+        "titulo": "Tablero inteligente",
+        "intro": "Dibujo algo con el dedo o el mouse y la IA adivina qué es. "
+                 "Mis garabatos por fin tienen un público que los entiende.",
+        "url": "https://drawrecog-x3f8wq83fxi.streamlit.app",
+        "boton": "Adivinar",
+    },
+    {
+        "icono": "🎨",
+        "titulo": "Tablero de dibujo",
+        "intro": "Un lienzo en blanco para dejar volar la imaginación: "
+                 "colores, trazos y mucho brillo para crear mis propias obras.",
+        "url": "https://tablero-37gwulk37pf.streamlit.app",
+        "boton": "Dibujar",
+    },
+    {
+        "icono": "🔢",
+        "titulo": "Detector de dígitos MNIST",
+        "intro": "Escribo un número a mano y una red neuronal lo reconoce. "
+                 "El clásico MNIST con un toque rosado.",
+        "url": "https://mnistpred-glach6jmhc8qgr23vjqqc3.streamlit.app",
+        "boton": "Detectar",
+    },
+    {
+        "icono": "📚",
+        "titulo": "RAG",
+        "intro": "Subo un documento y converso con él. Las respuestas salen "
+                 "de sus propias páginas, como una amiga que se lo leyó todo.",
+        "url": "https://chatpdf-8mffzagd74e.streamlit.app",
+        "boton": "Preguntar",
+    },
+    {
+        "icono": "🎛️",
+        "titulo": "MQTT Control",
+        "intro": "El panel de mando de mi laboratorio: envío órdenes por MQTT "
+                 "y el mundo físico responde. Casi telepatía.",
+        "url": "https://send-chw851ps3bp.streamlit.app",
+        "boton": "Controlar",
+    },
+    {
+        "icono": "📡",
+        "titulo": "Lector de sensor MQTT",
+        "intro": "La antena que escucha lo que dicen mis sensores en tiempo real. "
+                 "Datos del mundo físico llegando directo a mi bitácora.",
+        "url": "https://receptor-97f7kdufgy.streamlit.app",
+        "boton": "Recibir",
+    },
+    {
+        "icono": "🎀",
+        "titulo": "Análisis de Sanrio",
+        "intro": "Le muestro una imagen y la IA la analiza con ojos de fan: "
+                 "colores, personajes y todos los detalles kawaii.",
+        "url": "https://visionapp-q8od96sm5s.streamlit.app",
+        "boton": "Analizar",
+    },
+    {
+        "icono": "🎵",
+        "titulo": "Tablero musical",
+        "intro": "Un tablero donde las historias suenan: cada toque se "
+                 "convierte en música para acompañar mis cuentos.",
+        "url": "https://historiasinfant-ykndgfdwplm.streamlit.app",
+        "boton": "Tocar",
+    },
+]
+
+st.markdown(seccion("Entrega uno", "10 portales · primeras expediciones"), unsafe_allow_html=True)
+st.markdown(grid(APPS), unsafe_allow_html=True)
+
+st.markdown(seccion("Entrega dos", "8 portales · dibujo, MQTT y más"), unsafe_allow_html=True)
+st.markdown(grid(APPS_2), unsafe_allow_html=True)
 
 st.markdown(
     "<div class='separador'>♥ ✦ ♥ ✦ ♥ ✦ ♥</div>"
